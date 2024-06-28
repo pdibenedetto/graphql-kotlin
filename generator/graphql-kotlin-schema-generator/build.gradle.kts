@@ -10,7 +10,6 @@ dependencies {
     implementation(libs.classgraph)
     implementation(libs.slf4j)
     testImplementation(libs.rxjava)
-    testImplementation(libs.junit.params)
 }
 
 tasks {
@@ -20,7 +19,7 @@ tasks {
                 limit {
                     counter = "INSTRUCTION"
                     value = "COVEREDRATIO"
-                    minimum = "0.95".toBigDecimal()
+                    minimum = "0.96".toBigDecimal()
                 }
                 limit {
                     counter = "BRANCH"

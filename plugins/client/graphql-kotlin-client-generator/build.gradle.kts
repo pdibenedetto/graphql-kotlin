@@ -22,18 +22,17 @@ dependencies {
     testImplementation(projects.graphqlKotlinClientJackson)
     testImplementation(projects.graphqlKotlinClientSerialization)
     testImplementation(libs.wiremock.lib)
-    testImplementation(libs.compile.testing) {
-        // there is no kotlin compile testing release supporting kotlin 1.8.22
-        // explicitly downgrading kotlin version to match project version
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-annotation-processing-embeddable")
-        exclude(group = "org.jetbrains.kotlin", module = "kotlin-compiler-embeddable")
-    }
+    testImplementation(libs.compile.testing)
     testImplementation(libs.icu)
-    testImplementation(libs.junit.params)
     // compile testing workaround -> explicit dependencies for compiler/annotation-processing
     testImplementation(libs.kotlin.annotation.processing)
     testImplementation(libs.kotlin.compiler)
     testImplementation(libs.kotlin.serialization)
+    constraints {
+        implementation(libs.commons.codec) {
+            because("Cxeb68d52e-5509: Apache commons-codec before 1.13 is vulnerable to information exposure. https://devhub.checkmarx.com/cve-details/Cxeb68d52e-5509/")
+        }
+    }
 }
 
 tasks {
@@ -43,12 +42,12 @@ tasks {
                 limit {
                     counter = "INSTRUCTION"
                     value = "COVEREDRATIO"
-                    minimum = "0.90".toBigDecimal()
+                    minimum = "0.94".toBigDecimal()
                 }
                 limit {
                     counter = "BRANCH"
                     value = "COVEREDRATIO"
-                    minimum = "0.75".toBigDecimal()
+                    minimum = "0.85".toBigDecimal()
                 }
             }
         }

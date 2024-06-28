@@ -17,6 +17,11 @@ dependencies {
     testImplementation(libs.ktor.client.websockets)
     testImplementation(libs.ktor.server.cio)
     testImplementation(libs.ktor.server.test.host)
+    constraints {
+        implementation(libs.commons.codec) {
+            because("Cxeb68d52e-5509: Apache commons-codec before 1.13 is vulnerable to information exposure. https://devhub.checkmarx.com/cve-details/Cxeb68d52e-5509/")
+        }
+    }
 }
 
 tasks {
@@ -26,12 +31,12 @@ tasks {
                 limit {
                     counter = "INSTRUCTION"
                     value = "COVEREDRATIO"
-                    minimum = "0.70".toBigDecimal()
+                    minimum = "0.75".toBigDecimal()
                 }
                 limit {
                     counter = "BRANCH"
                     value = "COVEREDRATIO"
-                    minimum = "0.45".toBigDecimal()
+                    minimum = "0.48".toBigDecimal()
                 }
             }
         }
