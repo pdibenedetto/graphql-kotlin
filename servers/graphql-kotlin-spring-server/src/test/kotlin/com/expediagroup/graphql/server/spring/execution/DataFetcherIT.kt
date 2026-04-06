@@ -18,7 +18,6 @@ package com.expediagroup.graphql.server.spring.execution
 import com.expediagroup.graphql.generator.hooks.SchemaGeneratorHooks
 import com.expediagroup.graphql.server.operations.Query
 import com.expediagroup.graphql.server.types.GraphQLRequest
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import graphql.GraphQLContext
 import graphql.execution.CoercedVariables
 import graphql.language.StringValue
@@ -31,13 +30,14 @@ import graphql.schema.GraphQLType
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration
-import org.springframework.boot.jackson2.autoconfigure.Jackson2ObjectMapperBuilderCustomizer
+import org.springframework.boot.jackson.autoconfigure.JsonMapperBuilderCustomizer
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.web.server.LocalServerPort
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
+import tools.jackson.databind.cfg.DateTimeFeature
 import java.time.LocalDate
 import java.util.Locale
 import kotlin.reflect.KType
@@ -88,8 +88,8 @@ class DataFetcherIT {
         }
 
         @Bean
-        fun objectMapperCustomizer() = Jackson2ObjectMapperBuilderCustomizer { builder ->
-            builder.modulesToInstall(JavaTimeModule())
+        fun jsonMapperBuilderCustomizer() = JsonMapperBuilderCustomizer { builder ->
+            builder.configure(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS, false)
         }
 
         private val localDateType = GraphQLScalarType.newScalar()
